@@ -1,5 +1,6 @@
 package com.scaler.sampleprojectname.controller;
 
+import com.scaler.sampleprojectname.dto.CreateProductRequestDto;
 import com.scaler.sampleprojectname.model.Product;
 import com.scaler.sampleprojectname.service.FakeStoreProductService;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +24,14 @@ public class ProductController {
     }
 
     @PostMapping("/products")
-    public void createProduct()
+    public Product createProduct(@RequestBody CreateProductRequestDto  request)
     {
+
+        if(request.getDescription() == null || request.getDescription().isEmpty())
+        {
+            throw new IllegalArgumentException("Description cannot be empty");
+        }
+        return service.createProduct(request.getTitle(),request.getImageUrl(),request.getDescription(),request.getCategory().getTitle());
 
     }
 

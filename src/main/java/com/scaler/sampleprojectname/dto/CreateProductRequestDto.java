@@ -1,21 +1,11 @@
-package com.scaler.sampleprojectname.model;
+package com.scaler.sampleprojectname.dto;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToOne;
-
-@Entity
-public class Product extends BaseModel {
-
+public class CreateProductRequestDto {
 
     private String title;
     private String description;
     private String imageUrl;
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Category category;
-
-
+    private CategoryRequestDto category;
 
     public String getTitle() {
         return title;
@@ -41,11 +31,20 @@ public class Product extends BaseModel {
         this.imageUrl = imageUrl;
     }
 
-    public Category getCategory() {
+    public CategoryRequestDto getCategory() {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(CategoryRequestDto category) {
         this.category = category;
+    }
+    @Override
+    public String toString() {
+        return "CreateProductRequestDto{" +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", category=" + category +  // category is an object, so we rely on its own toString()
+                '}';
     }
 }

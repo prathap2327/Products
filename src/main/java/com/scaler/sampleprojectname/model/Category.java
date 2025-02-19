@@ -1,18 +1,16 @@
 package com.scaler.sampleprojectname.model;
 
+import jakarta.persistence.Entity;
 
-public class Category {
-private Integer id;
+@Entity
+public class Category extends BaseModel {
+
 private String title;
 
-    public Integer getId() {
-        return id;
+public Category() {}
+    public Category(String title) {
+    this.title = title;
     }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public String getTitle() {
         return title;
     }

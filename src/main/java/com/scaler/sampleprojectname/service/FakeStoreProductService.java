@@ -66,5 +66,39 @@ public class FakeStoreProductService {
 
         return product;
     }
+    public Product createProduct(String title,String imageUrl, String description,String title1) {
+        Product response ;
+
+        FakeStoreResponseDTO requestBody = new FakeStoreResponseDTO();
+        requestBody.setTitle(title);
+        requestBody.setImage(imageUrl);
+        requestBody.setDescription(description);
+        requestBody.setCategory(title1);
+
+
+
+
+
+
+
+        ResponseEntity<FakeStoreResponseDTO> fakeStoreResponse =restTemplate.postForEntity("https://fakestoreapi.com/products",requestBody, FakeStoreResponseDTO.class);
+
+        System.out.println("Status code: " + fakeStoreResponse.getStatusCode());
+        FakeStoreResponseDTO responseBody = fakeStoreResponse.getBody();
+        if (responseBody != null) {
+            // Print out the entire response to inspect it.
+            System.out.println("Response Body: " + responseBody.toString()); // Make sure to override toString() in FakeStoreResponseDTO if needed.
+
+            // Optionally, print individual fields to check specific ones like description.
+            System.out.println("Product Title: " + responseBody.getTitle());
+            System.out.println("Product Description: " + responseBody.getDescription());
+            System.out.println("Product Image: " + responseBody.getImage());
+            System.out.println("Product Category: " + responseBody.getCategory());
+        } else {
+            System.out.println("Response Body is null.");
+        }
+        response = convertFakeStoreResponseToProduct(fakeStoreResponse.getBody());
+        return  response;
+    }
 
 }
