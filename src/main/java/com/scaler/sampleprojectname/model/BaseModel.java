@@ -6,9 +6,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.Date;
 @MappedSuperclass
-public class BaseModel {
+public class BaseModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;

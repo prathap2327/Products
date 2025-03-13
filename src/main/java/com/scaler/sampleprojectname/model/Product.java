@@ -1,18 +1,22 @@
 package com.scaler.sampleprojectname.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 
+import java.io.Serializable;
+
 @Entity
-public class Product extends BaseModel {
+public class Product extends BaseModel implements Serializable {
 
 
     private String title;
     private String description;
     private String imageUrl;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JsonIgnore
     private Category category;
 
 
@@ -47,5 +51,15 @@ public class Product extends BaseModel {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", category=" + (category != null ? category.getId() : "null") + // Avoid NullPointerException
+                '}';
     }
 }

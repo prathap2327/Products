@@ -3,6 +3,11 @@ package com.scaler.sampleprojectname.controller;
 import com.scaler.sampleprojectname.dto.CreateProductRequestDto;
 import com.scaler.sampleprojectname.model.Product;
 import com.scaler.sampleprojectname.service.FakeStoreProductService;
+import com.scaler.sampleprojectname.service.ProductService;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,16 +16,23 @@ import java.util.List;
 @RestController
 public class ProductController {
 
-    private FakeStoreProductService service;
+    private ProductService service;
 
-    public ProductController(FakeStoreProductService inputService)
+    public ProductController(@Qualifier("selfProductService") ProductService inputService)
     {
+
         this.service = inputService;
     }
     @GetMapping("/products/{id}")
+    @Cacheable(value = "product",key = "#id")
     public Product getProductById(@PathVariable("id")Integer id)
     {
-       return service.getProductById(id);
+       Product product = service.getProductById(id);
+       if(product == null)
+       {
+           throw new IllegalArgumentException("product not found");
+       }
+       return product;
     }
 
     @PostMapping("/products")
@@ -49,5 +61,11 @@ public class ProductController {
     public void deleteProductById(@PathVariable("id")Integer id)
     {
 
+    }
+    @GetMapping("/products/{pageNo}/{pageSize}")
+    public ResponseEntity<Page<Product>> getPaginatedProducts(@PathVariable("pageNo") int pageNo,@PathVariable("pageSize") int pageSize)
+    {
+        Page<Product> products =  service.getPaginatedProducts(pageNo,pageSize);
+        return ResponseEntity.ok(products);
     }
 }
